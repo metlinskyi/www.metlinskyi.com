@@ -3,6 +3,7 @@ FROM nginx:alpine
 LABEL maintainer Roman Metlinskyi <gmail@metlinskyi.com>
 
 RUN apk --update --no-cache add \
+	sudo \
 	shadow \
 	git \
 	nodejs \ 
@@ -17,6 +18,9 @@ RUN npm install -g sass
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY startup.sh /usr/local/bin/startup.sh
+
+EXPOSE 4200
+EXPOSE 3000
 
 WORKDIR /usr/share/nginx/html
 

@@ -12,6 +12,11 @@ if [ `ls -A "$app/$target/" | wc -m` == "0" ]; then
     ng new $target
 fi
 
+alias angular-serve="cd $app/$target && ng serve --open"
+echo "cd $app/$target && ng serve --open"
+
+cd "$app/$target" && ng serve --open >/dev/null &
+
 target='polymer'
 if [ `ls -A "$app/$target/" | wc -m` == "0" ]; then
     echo "$app/$target/ empty"
@@ -20,6 +25,11 @@ if [ `ls -A "$app/$target/" | wc -m` == "0" ]; then
     cd "$target"
     npm install
 fi
+
+alias polymer-serve="cd $app/$target && polymer serve --port 3000"
+echo "cd $app/$target && polymer serve --port 3000"
+
+cd "$app/$target" && polymer serve --port 3000 >/dev/null &
 
 chmod -R 777 /usr/share/app
 chmod -R 777 /usr/share/nginx/html
