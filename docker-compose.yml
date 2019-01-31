@@ -1,0 +1,11 @@
+version: "3.6"
+services:
+    apps:
+        image: apps
+        build: ./docker/
+        ports:
+            - 1480:80  # angular http://localhost:1480/ 
+            - 1488:88  # polymer http://localhost:1488/
+        volumes:
+            - ./app:/usr/share/app
+            - ./dist:/usr/share/nginx/html
