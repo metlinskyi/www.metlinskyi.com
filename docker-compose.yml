@@ -1,9 +1,10 @@
 version: "3.6"
 services:
     apps:
-        image: web/app
+        container_name: dev.app
+        image: dev/app
         build: 
-            container_name: web.app
+
             context: ./docker/app
             args:
                 - email=gmail@metlinskyi.com

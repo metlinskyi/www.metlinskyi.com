@@ -20,6 +20,9 @@ RUN npm install -g less
 RUN npm install -g typescript 
 RUN npm install -g grunt-cli
 RUN npm install -g webpack
+RUN npm install -g jasmine
+RUN npm install -g karma-cli
+RUN npm install -g mocha
 RUN npm install -g @angular/cli
 RUN npm install -g create-react-app
 RUN npm install -g @vue/cli

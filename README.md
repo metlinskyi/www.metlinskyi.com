@@ -10,8 +10,11 @@ docker-compose -f "docker-compose.yml" up -d --build
 
 ... waiting 
 
-http://localhost:1482/ - angular 
-http://localhost:1488/ - polymer 
+# angular http://localhost:1481/ 
+# reactjs http://localhost:1482/   
+# vurejs  http://localhost:1484/   
+# emberjs http://localhost:1485/  
+# polymer http://localhost:1488/
 
 Enjoy!
 
