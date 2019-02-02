@@ -1,13 +1,20 @@
 version: "3.6"
 services:
     apps:
-        image: apps
-        build: ./docker/
+        image: web/app
+        build: 
+            container_name: web.app
+            context: ./docker/app
+            args:
+                - email=gmail@metlinskyi.com
+                - name=Roman Metlinskyi
         ports:
-            - 1481:81       # angular dist  http://localhost:1481/ 
-            - 1482:82       # angular dev   http://localhost:1482/ 
-            - 1484:84       # polymer dist  http://localhost:1484/
-            - 1488:88       # polymer dev   http://localhost:1488/
+            - 1481:81 # angular dev   http://localhost:1481/ 
+            - 1482:82 # reactjs dev   http://localhost:1482/   
+            - 1484:84 # vurejs  dev   http://localhost:1484/   
+            - 1485:85 # emberjs dev   http://localhost:1485/  
+            - 1488:88 # polymer dev   http://localhost:1488/
         volumes:
             - ./app:/usr/share/app
-            - ./dist:/usr/share/nginx/html
+        env_file:
+            - ./docker/variables.env
