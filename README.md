@@ -22,5 +22,4 @@ Enjoy!
 
 &nbsp;
 ============
-&copy; [The best software engineer in the Universe!](http://www.metlinskyi.com/)
-
+&copy; [The best software engineer in the Universe!](https://www.linkedin.com/in/metlinskyi/)
