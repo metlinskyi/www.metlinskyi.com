@@ -1,0 +1,97 @@
+# .NET
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.cache
+**/*.csproj.user
+**/*.csproj.nuget.dgspec.json
+**/*.csproj.nuget.g.props
+**/*.csproj.nuget.g.targets
+**/project.assets.json
+**/.vs/
+**/appsettings.Development.json
+**/appsettings.*.json
+!**/appsettings.json
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Node/NPM
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.npm
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# SSL/Certificates
+*.pem
+*.key
+*.crt
+*.csr
+*.pfx
+*.p12
+
+# Server/Nginx
+**/server/certbot/
+**/server/letsencrypt/
+**/server/logs/
+*.pid
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Test coverage
+coverage/
+*.coverage
+*.coveragexml
