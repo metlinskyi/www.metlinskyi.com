@@ -8,8 +8,6 @@
 
 ```bash
 git submodule add git@github.com:metlinskyi/<name>.git <dir>
-
-git submodule add git@github.com:metlinskyi/data.git data
 ```
 
 ## Workflows
