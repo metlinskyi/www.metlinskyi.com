@@ -2,11 +2,11 @@
 
 
 ## Submodules
+- **`api/`** - .NET 9.0 Web API with async polling pattern
+- **`www/`** - Browser-based terminal emulator (vanilla JavaScript)
 
-**API**
+## Workflows
 
-
-**WWW**
 
 
 &nbsp;
