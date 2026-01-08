@@ -1,0 +1,20 @@
+FROM    alpine
+
+LABEL   maintainer="Roman Metlinskyi" \
+        email="gmail@metlinskyi.com" \
+        version="1.0"
+
+        # Create command script
+RUN     echo "rm -rf /app/* && cp -r /src/* /app/" > /entrypoint.sh
+RUN     chmod +x /entrypoint.sh
+
+        # Copy source files
+WORKDIR /src
+COPY    /www/src .
+        
+        # Update version query parameter to force reload of terminal.js and terminal.css
+RUN     sed -i -e "s/?version/?$(date +'%Y%m%d%H%M')/g" index.html
+
+WORKDIR /app
+
+CMD [ "sh", "/entrypoint.sh" ]

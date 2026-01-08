@@ -1,0 +1,56 @@
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+
+# Install native AOT compilation prerequisites
+RUN apk add --no-cache \
+    clang \
+    build-base \
+    zlib-dev
+
+WORKDIR /src
+
+# Copy project file and restore dependencies
+COPY api/src/api.csproj .
+RUN dotnet restore
+
+# Copy remaining source code
+COPY api/src .
+
+# Publish the application with AOT compilation
+RUN dotnet publish -c Release -o /app/publish \
+    --runtime linux-musl-x64 \
+    --self-contained true \
+    /p:PublishAot=true \
+    /p:PublishTrimmed=true \
+    /p:PublishSingleFile=true
+
+# Runtime stage
+FROM alpine:latest
+WORKDIR /app
+
+# Install dependencies required for .NET AOT binaries
+RUN apk add --no-cache \
+    libstdc++ \
+    libgcc \
+    libintl \
+    icu-libs
+
+# Copy the published application from build stage
+COPY --from=build /app/publish .
+
+# Create a non-root user to run the application
+RUN addgroup -g 1000 appuser && \
+    adduser -D -u 1000 -G appuser appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
+# Expose the port (adjust if needed)
+EXPOSE 8080
+
+# Set environment variables
+ENV ASPNETCORE_URLS=http://+:8080
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+
+# Run the application
+ENTRYPOINT ["./api"]
