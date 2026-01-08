@@ -6,6 +6,10 @@
 - **`server`** - Proxy-server by Nginx
 - **`www`** - Browser-based terminal emulator (vanilla JavaScript)
 
+```bash
+git submodule add git@github.com:metlinskyi/<name>.git <dir>
+```
+
 ## Workflows
 
 ```bash
