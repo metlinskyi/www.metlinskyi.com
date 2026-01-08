@@ -1,5 +1,5 @@
 # www.metlinskyi.com
-![alt text](https://github.com/metlinskyi/www.metlinskyi.com/blob/master/assets/header.jpg?raw=true)
+![alt text](https://github.com/metlinskyi/www.metlinskyi.com/blob/master/assets/header.png?raw=true)
 
 
 
