@@ -1,4 +1,4 @@
-# ![alt text](https://github.com/metlinskyi/www.metlinskyi.com/blob/master/.github/assets/header.png?raw=true)
+# ![alt text](https://github.com/metlinskyi/www.metlinskyi.com/blob/_/.github/assets/header.png?raw=true)
 
 
 ## Submodules
