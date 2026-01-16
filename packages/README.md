@@ -27,8 +27,6 @@ docker build --pull --rm -f "dockerfile.www" -t metlinskyi/com:www "."
 docker push metlinskyi/com:www
 ```
 
-dotnet nuget add api/Api/Api.csproj source packages
-
 
 &nbsp;
 ============
