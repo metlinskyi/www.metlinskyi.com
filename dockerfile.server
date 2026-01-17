@@ -23,6 +23,5 @@ RUN     chmod +x /entrypoint
 
         # Expose ports
 EXPOSE  80 443
-
+        
 ENTRYPOINT [ "/entrypoint" ]
-

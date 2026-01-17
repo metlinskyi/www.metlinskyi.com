@@ -11,6 +11,9 @@ RUN     chmod +x /entrypoint.sh
         # Copy source files
 WORKDIR /src
 COPY    /www/src .
+
+WORKDIR /src
+COPY    /www/robots.txt .
         
         # Update version query parameter to force reload of terminal.js and terminal.css
 RUN     sed -i -e "s/?version/?$(date +'%Y%m%d%H%M')/g" index.html
