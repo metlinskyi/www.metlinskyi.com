@@ -4,24 +4,30 @@ LABEL   maintainer="Roman Metlinskyi" \
         email="gmail@metlinskyi.com" \
         version="1.0"
 
-        # Install certbot
-RUN     apk add --no-cache certbot
+        # Install additional packages
+RUN     apk add --no-cache \
+        certbot \
+        openssl
 
         # Copy renew cron script
-COPY    server/renew /etc/periodic/daily/renew
-RUN     chmod +x /etc/periodic/daily/renew
-RUN     mkdir /var/lib/certbot
+COPY    server/renew                    /etc/periodic/daily/renew
+RUN     chmod +x                        /etc/periodic/daily/renew
+RUN     mkdir                           /var/lib/certbot
+
+        # Copy SSL certificates
+ARG     certificate=letsencrypt
+COPY    server/ssl/$certificate/        /etc/nginx/ssl/
 
         # Copy nginx configuration files   
-COPY    server/config/default.conf     /etc/nginx/conf.d/default.conf     
-COPY    server/config/apps/            /etc/nginx/apps/
-COPY    server/config/include/         /etc/nginx/
+ARG     environment=production
+COPY    server/$environment.conf         /etc/nginx/conf.d/default.conf     
+COPY    server/config/                   /etc/nginx/
 
         # Copy entrypoint
-COPY    server/entrypoint /entrypoint
-RUN     chmod +x /entrypoint
+COPY    server/$environment             /entrypoint
+RUN     chmod +x                        /entrypoint
 
         # Expose ports
-EXPOSE  80 443
+EXPOSE  80 443 8080
         
 ENTRYPOINT [ "/entrypoint" ]

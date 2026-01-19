@@ -5,16 +5,25 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 RUN apk add --no-cache \
     clang \
     build-base \
-    zlib-dev
+    zlib-dev \
+    protobuf-dev \
+    grpc-plugins
+
+COPY packages/ ./packages/
+RUN  dotnet nuget add source /packages/ --name local
 
 WORKDIR /src
 
 # Copy project file and restore dependencies
-COPY api/Api/Api.csproj .
+COPY api/src/api.csproj .
 RUN dotnet restore
 
 # Copy remaining source code
-COPY api/Api .
+COPY api/src .
+
+# Set environment variable to use system protoc instead of the bundled one
+ENV PROTOBUF_PROTOC=/usr/bin/protoc
+ENV GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin
 
 # Publish the application with AOT compilation
 RUN dotnet publish -c Release -o /app/publish \
@@ -45,9 +54,11 @@ RUN addgroup -g 1000 appuser && \
 
 USER appuser
 
+ARG  environment=Production
 # Set environment variables
-ENV ASPNETCORE_URLS=http://+:8080
+#ENV ASPNETCORE_URLS=http://+:8081
 ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV ASPNETCORE_ENVIRONMENT=$environment 
 
 # Run the application
-ENTRYPOINT ["./Api"]
+ENTRYPOINT ["./api"]

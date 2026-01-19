@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Generate self-signed SSL certificates if they do not exist
+if [ ! -f /etc/nginx/ssl/certificate.pem ]; then
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/certificate_key.pem -out /etc/nginx/ssl/certificate.pem -subj "/C=CZ/ST=NA/L=Brno/O=NA/OU=NA/CN=metlinskyi.com"
+fi
+
+# Obtain or renew SSL certificates
+if [ ! -f /etc/letsencrypt/live/metlinskyi.com/fullchain.pem ]; then
+  certbot certonly -n -d \
+    metlinskyi.com,www.metlinskyi.com \
+    --standalone --preferred-challenges http --email admin@metlinskyi.com --agree-tos --expand
+fi
+
+# Kick off cron
+/usr/sbin/crond -f -d 8 &
+
+# Start nginx
+/usr/sbin/nginx -g "daemon off;"

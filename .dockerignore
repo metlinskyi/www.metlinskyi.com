@@ -54,3 +54,11 @@ yarn-error.log
 # Temporary files
 *.tmp
 *.temp
+
+.sh
+.git*
+
+readme.md
+README.md
+.DS_Store.
+.vscode
