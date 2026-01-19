@@ -1,36 +1,104 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [ "_" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  API:
+    runs-on: ubuntu-24.04
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Build API Docker image
+        run: | 
+            docker build --pull --rm -f "dockerfile.api" -t metlinskyi/com:api "."
+            docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+            docker push metlinskyi/com:api
+      - name: Deploy to server
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          ssh $GIT_HUB_USERNAME@metlinskyi.com -t \
+          "
+            docker container stop api || true && \
+            docker container rm api || true && \
+            docker pull metlinskyi/com:api && \
+            docker run -d --restart always \
+                  --name api \
+                  --network=metlinskyi \
+                  -h api \
+                  metlinskyi/com:api
+          "
+
+  DATA:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Data Docker image
+        run: | 
+            docker build --pull --rm -f "dockerfile.data" -t metlinskyi/com:data "."
+            docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+            docker push metlinskyi/com:data
+      - name: Deploy to server
+        run: |
+          ssh $GIT_HUB_USERNAME@metlinskyi.com -t \ 
+          "
+            docker container stop api || true && \
+            docker pull metlinskyi/com:data && \
+            docker run -d \
+                  --name data \
+                  --network=metlinskyi \
+                  metlinskyi/com:data \
+            docker container start api
+          "
+
+  SERVER:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Server Docker image
+        run: | 
+            docker build --pull --rm -f "dockerfile.server" -t metlinskyi/com:server "."
+            docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+            docker push metlinskyi/com:server
+      - name: Deploy to server
+        run: |
+          ssh $GIT_HUB_USERNAME@metlinskyi.com -t \ 
+          "
+            docker container stop server || true && \
+            docker container rm server || true && \
+            docker pull metlinskyi/com:server && \
+            docker run -d --restart always \
+                    --name server \
+                    --network=metlinskyi \
+                    -h server \
+                    -p 80:80 \
+                    -p 443:443 \
+                    -p 8080:8080 \
+                    -v www:/var/www:ro \
+                    -v letsencrypt:/etc/letsencrypt/live/metlinskyi.com:rw \
+                    metlinskyi/com:server
+          "
+
+  WWW:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build UI Docker image
+        run: | 
+            docker build --pull --rm -f "dockerfile.www" -t metlinskyi/com:www "."
+            docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+            docker push metlinskyi/com:www
+      - name: Deploy to server
+        run: |
+          ssh $GIT_HUB_USERNAME@metlinskyi.com -t \ 
+          "
+            docker container stop www || true && \
+            docker container rm www || true && \
+            docker pull metlinskyi/com:www && \
+            docker run -d \
+                  --name www \
+                  --network=metlinskyi \
+                  metlinskyi/com:www
+          "
