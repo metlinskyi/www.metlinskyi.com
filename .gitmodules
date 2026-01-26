@@ -1,10 +1,9 @@
 [submodule "api"]
 	path = api
 	url = git@github.com:metlinskyi/api.git
-
-[submodule "www"]
-	path = www
-	url = git@github.com:metlinskyi/www.git
 [submodule "data"]
 	path = data
 	url = git@github.com:metlinskyi/data.git
+[submodule "www"]
+	path = www
+	url = git@github.com:metlinskyi/www.git
