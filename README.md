@@ -25,6 +25,7 @@ docker volume create www
 ```bash
 docker build --pull --rm -f "dockerfile.api" -t metlinskyi/com:api-development "." \
         --build-arg environment=Development \
+        --no-cache --progress=plain 
 docker run -d \
     --name api \
     --network=metlinskyi \

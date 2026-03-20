@@ -10,7 +10,8 @@ RUN apk add --no-cache \
     grpc-plugins
 
 COPY packages/ ./packages/
-RUN  dotnet nuget add source /packages/ --name local
+RUN dotnet nuget add source /packages/ --name local
+RUN dotnet nuget list source
 
 WORKDIR /src
 
@@ -26,12 +27,9 @@ ENV PROTOBUF_PROTOC=/usr/bin/protoc
 ENV GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin
 
 # Publish the application with AOT compilation
-RUN dotnet publish -c Release -o /app/publish \
+RUN dotnet publish api.csproj -c Release -o /app/publish \
     --runtime linux-musl-x64 \
-    --self-contained true \
-    /p:PublishAot=true \
-    /p:PublishTrimmed=true \
-    /p:PublishSingleFile=true
+    --self-contained true 
 
 # Runtime stage
 FROM alpine:latest
