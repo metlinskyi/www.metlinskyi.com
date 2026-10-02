@@ -16,20 +16,20 @@ RUN dotnet nuget list source
 WORKDIR /src
 
 # Copy project file and restore dependencies
-COPY api/src/api.csproj .
+COPY api/Api/Api.csproj .
 RUN dotnet restore
 
 # Copy remaining source code
-COPY api/src .
+COPY api/Api .
 
 # Set environment variable to use system protoc instead of the bundled one
 ENV PROTOBUF_PROTOC=/usr/bin/protoc
 ENV GRPC_PROTOC_PLUGIN=/usr/bin/grpc_csharp_plugin
 
 # Publish the application with AOT compilation
-RUN dotnet publish api.csproj -c Release -o /app/publish \
-    --runtime linux-musl-x64 \
-    --self-contained true 
+RUN dotnet publish Api.csproj -c Release -o /app/publish \
+   --runtime linux-musl-x64 \
+   --self-contained true 
 
 # Runtime stage
 FROM alpine:latest
@@ -59,4 +59,4 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV ASPNETCORE_ENVIRONMENT=$environment 
 
 # Run the application
-ENTRYPOINT ["./api"]
+ENTRYPOINT ["./Self.Api"]

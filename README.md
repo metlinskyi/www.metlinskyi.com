@@ -28,7 +28,7 @@ docker build --pull --rm -f "dockerfile.api" -t metlinskyi/com:api-development "
         --no-cache --progress=plain 
 docker run -d \
     --name api \
-    --network=metlinskyi \
+    --network=frontend \
     -h api \
     -p 8081:8081 \
     -p 8082:8082 \
@@ -41,11 +41,13 @@ docker build --pull --rm -f "dockerfile.api" -t metlinskyi/com:api "."
 docker push metlinskyi/com:api
 ```
 ```bash
+scp api/src/appsettings.Production.json duck@metlinskyi.com:appsettings.json
 docker pull metlinskyi/com:api
 docker run -d --restart always \
     --name api \
-    --network=metlinskyi \
+    --network=frontend \
     -h api \
+    -v $(pwd)/appsettings.json:/app/appsettings.json:ro \
     metlinskyi/com:api
 ```
 
@@ -65,7 +67,7 @@ docker build --pull --rm -f "dockerfile.server" -t metlinskyi/com:server-develop
         --build-arg certificate=selfsigned 
 docker run -d \
         --name server \
-        --network=metlinskyi \
+        --network=frontend \
         -h server \
         -p 80:80 \
         -p 443:443 \
@@ -84,7 +86,7 @@ docker push metlinskyi/com:server
 docker pull metlinskyi/com:server
 docker run -d --restart always \
         --name server \
-        --network=metlinskyi \
+        --network=frontend \
         -h server \
         -p 80:80 \
         -p 443:443 \
